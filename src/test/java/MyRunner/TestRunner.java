@@ -10,7 +10,6 @@ import io.cucumber.junit.CucumberOptions;
 monochrome = true, 
 plugin = {"json:target/cucumber.json"},
 dryRun = false, 
-publish = true,
 strict = true  // will be removed and cucumber By default strict
 )
 public class TestRunner {

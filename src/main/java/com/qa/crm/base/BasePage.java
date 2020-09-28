@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -21,16 +22,26 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class BasePage {
 
-	Properties prop;
-	WebDriver driver;
+	public static Properties prop;
+	public static WebDriver driver;
 	public static String flashElement;
 	OptionsManager manager;
 	public static ThreadLocal<WebDriver> tlDriver = new ThreadLocal<WebDriver>();
 		
+	/**
+	 * 
+	 * @return This method written synchronized ThreadLocal WebDriver
+	 */
 	public static synchronized WebDriver getDriver() {
 		return tlDriver.get();
 	}
+	
 
+	/**
+	 * This method take properties and give us webdriver
+	 * @param prop
+	 * @return Webdriver
+	 */
 	public WebDriver init_driver(Properties prop) {
 		flashElement = prop.getProperty("highlights").trim();
 		String browserName = prop.getProperty("browser").trim();
@@ -64,11 +75,22 @@ public class BasePage {
 		else {
 			System.out.println("Please Pass The Correct Browser Name : " + browserName);
 		}
+		
+		getDriver().manage().deleteAllCookies();
+		getDriver().manage().window().maximize();
+		getDriver().manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
+		getDriver().manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+		
 
 		return getDriver();
 	}
 
 	
+	/**
+	 * This method will design the desired capabilities and will initialize the 
+	 * driver with capability Also, this method initialize driver with selenium Hub/port
+	 * @param browser
+	 */
 	public void init_remoteWebDriver(String browser) {
 		if(browser.equalsIgnoreCase("chrome")) {
 			DesiredCapabilities cap = new DesiredCapabilities().chrome();  
@@ -93,7 +115,10 @@ public class BasePage {
 		
 	}
 	
-	
+	/**
+	 * 
+	 * @return Properties read from Config.properties file and return 
+	 */
 	public Properties init_prop() {
 		prop = new Properties();
 		String path = null;

@@ -20,11 +20,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.qa.crm.base.BasePage;
 
-
-
 public class ElementUtils {
-	
-	
+		
 	WebDriver driver;
 	JavaScriptUtil jsUtil;
 
@@ -65,6 +62,7 @@ public class ElementUtils {
 
 	public void doClick(By locator) {
 		getElement(locator).click();
+		
 	}
 
 	public String doGetText(By locator) {

@@ -13,6 +13,7 @@ hs_err_pid*
 ##############################
 ## Maven
 ##############################
+HTML-Report/
 Json-Report/
 Junit-Report/
 allure-results/
