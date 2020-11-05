@@ -27,7 +27,9 @@ public class BasePage {
 	public static String flashElement;
 	OptionsManager manager;
 	public static ThreadLocal<WebDriver> tlDriver = new ThreadLocal<WebDriver>();
-		
+	
+	
+	
 	/**
 	 * 
 	 * @return This method written synchronized ThreadLocal WebDriver
@@ -35,6 +37,8 @@ public class BasePage {
 	public static synchronized WebDriver getDriver() {
 		return tlDriver.get();
 	}
+	
+	
 	
 
 	/**
@@ -86,6 +90,8 @@ public class BasePage {
 	}
 
 	
+	
+	
 	/**
 	 * This method will design the desired capabilities and will initialize the 
 	 * driver with capability Also, this method initialize driver with selenium Hub/port
@@ -114,6 +120,9 @@ public class BasePage {
 		}
 		
 	}
+	
+	
+	
 	
 	/**
 	 * 

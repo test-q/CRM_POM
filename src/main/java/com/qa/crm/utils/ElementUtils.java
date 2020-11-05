@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -21,7 +22,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.qa.crm.base.BasePage;
 
 public class ElementUtils {
-		
+
 	WebDriver driver;
 	JavaScriptUtil jsUtil;
 
@@ -38,8 +39,8 @@ public class ElementUtils {
 	 */
 	public WebElement getElement(By locator) {
 		WebElement element = driver.findElement(locator);
-		if(Boolean.parseBoolean(BasePage.flashElement))
-		jsUtil.flash(element);
+		if (Boolean.parseBoolean(BasePage.flashElement))
+			jsUtil.flash(element);
 		return element;
 	}
 
@@ -57,12 +58,12 @@ public class ElementUtils {
 
 	public void doSendKeys(By locator, String value) {
 		getElement(locator).sendKeys(value);
-		//driver.findElement(locator).sendKeys(value);
+		// driver.findElement(locator).sendKeys(value);
 	}
 
 	public void doClick(By locator) {
 		getElement(locator).click();
-		
+
 	}
 
 	public String doGetText(By locator) {
@@ -225,7 +226,7 @@ public class ElementUtils {
 	 * suggestion list
 	 * 
 	 * @param locator
-	 * @param text
+	 * @param text    to click
 	 * @return
 	 */
 	public ArrayList<String> doSuggestionListClick(By locator, String text) {
@@ -250,6 +251,24 @@ public class ElementUtils {
 			System.out.println(text + " : Is not found in suggestion list.");
 		}
 		return suggestionText;
+	}
+
+	/**
+	 * This method used to click on all iteam in the menu list.
+	 * 
+	 * @param locator
+	 * @return boolean value
+	 */
+	public void doAllListClick(By locator) {
+
+		List<WebElement> suggestionEleList = driver.findElements(locator);
+		System.out.println(suggestionEleList.size());
+
+		for (WebElement ele : suggestionEleList) {
+			String value = ele.getText();
+			System.out.println(value);
+		}
+
 	}
 
 	/**
@@ -349,6 +368,7 @@ public class ElementUtils {
 		return wait.until(ExpectedConditions.visibilityOf(element));
 
 	}
+
 	public WebElement waitForElementToBeVisible(By locator, int timeout) {
 		WebDriverWait wait = new WebDriverWait(driver, timeout);
 		return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
@@ -364,24 +384,24 @@ public class ElementUtils {
 		WebDriverWait wait = new WebDriverWait(driver, timeout);
 		return wait.until(ExpectedConditions.urlContains(url));
 	}
-	
+
 	public Alert waitForAlertToBePresent(int timeout) {
 		WebDriverWait wait = new WebDriverWait(driver, timeout);
 		Alert alert = wait.until(ExpectedConditions.alertIsPresent());
 		return alert;
 	}
-	
-	public WebElement waitForElementToBeClickable(By locator, int timeOut){
+
+	public WebElement waitForElementToBeClickable(By locator, int timeOut) {
 		WebDriverWait wait = new WebDriverWait(driver, timeOut);
 		return wait.until(ExpectedConditions.elementToBeClickable(locator));
 	}
-	
-	public void clickWhenReady(By locator, int timeOut){
+
+	public void clickWhenReady(By locator, int timeOut) {
 		WebDriverWait wait = new WebDriverWait(driver, timeOut);
 		WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
 		element.click();
 	}
-	
+
 	public List<WebElement> visibilityofAllElements(By locator, int timeOut) {
 		WebDriverWait wait = new WebDriverWait(driver, timeOut);
 		return wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
@@ -390,46 +410,43 @@ public class ElementUtils {
 	public void getPageLinksText(By locator, int timeOut) {
 		visibilityofAllElements(locator, timeOut).stream().forEach(ele -> System.out.println(ele.getText()));
 	}
-	
-	public WebElement waitForElementWithFluentWait(By locator, int timeout , int interval) {
-		Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
-									.withTimeout(Duration.ofSeconds(timeout))
-									.pollingEvery(Duration.ofSeconds(interval))
-									.ignoring(NoSuchElementException.class);
+
+	public WebElement waitForElementWithFluentWait(By locator, int timeout, int interval) {
+		Wait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(Duration.ofSeconds(timeout))
+				.pollingEvery(Duration.ofSeconds(interval)).ignoring(NoSuchElementException.class);
 		return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
 	}
-	
-	// ***************************** WINDOW HANDLE UTILITY ******************************
-	
+
+	// ***************************** WINDOW HANDLE UTILITY
+	// ******************************
+
 	public void getBrowserWindowHandle(Set<String> windowSet, String parentWindowId) {
 		int count = windowSet.size();
 		System.out.println("No. Of Windows Opened: " + count);
 		Iterator<String> it = windowSet.iterator();
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			String curChildWindowId = it.next();
-			if(! parentWindowId.equals(curChildWindowId)) {
+			if (!parentWindowId.equals(curChildWindowId)) {
 				driver.switchTo().window(curChildWindowId);
 				System.out.println("Title Of child Window: " + driver.getTitle());
 				driver.close();
-			}			
-		}		
+			}
+		}
 	}
-	
+
 	public void getBrowserWindowHandleWithList(Set<String> windowSet, String parentWindowId) {
-		List<String> windowList= new ArrayList<String>(windowSet);
+		List<String> windowList = new ArrayList<String>(windowSet);
 		int count = windowList.size();
 		System.out.println("No of Windows Opened: " + count);
-		
-		for(int i=0; i<count; i++) {
+
+		for (int i = 0; i < count; i++) {
 			String curChildWindowId = windowList.get(i);
-			if(! parentWindowId.equals(curChildWindowId)) {
+			if (!parentWindowId.equals(curChildWindowId)) {
 				driver.switchTo().window(curChildWindowId);
 				System.out.println("Title Of Child Window " + i + " : " + driver.getTitle());
 				driver.close();
 			}
 		}
 	}
-
-
 
 }

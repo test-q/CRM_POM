@@ -1,7 +1,5 @@
 Feature: Test Login Feature 
 
-Background: Open CRM site 
-	When CRM site is open 
 	
 Scenario: Verify Login with valid Credentials 
 	Given user is on login page 
