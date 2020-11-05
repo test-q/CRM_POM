@@ -6,7 +6,7 @@ import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features="src/main/java/com/qa/crm/features/login.feature", glue= {"com.qa.crm.stepDefinations"},
+@CucumberOptions(features="src/main/java/com/qa/crm/features", glue= {"com.qa.crm.stepDefinations"},
 monochrome = true, 
 plugin = {"json:target/cucumber.json"},
 dryRun = false, 
