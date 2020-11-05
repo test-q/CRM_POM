@@ -12,4 +12,6 @@ public class RegiPage {
 	public RegiPage(WebDriver driver) {
 		this.driver = driver;
 	}
+	
+	// Rupali
 }
